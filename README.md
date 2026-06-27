@@ -1,6 +1,38 @@
 # AI-Recovery-navigation
 AI relapse prevention and care navigation planner for intake and initial treatment for substance use rehab facilities
 
+---
+
+## Project status
+
+Local-first MVP, built in phases (see "Implementation phases" below). **Phase 1 complete:** monorepo scaffold, FastAPI backend with `/health`, Next.js landing page, Docker Compose (Postgres/pgvector + Redis), and mock-mode LLM config. Phases 2–7 (database, consent/intake, journal/documents, safety classifier, mock artifact generation, dashboard/exports) are not yet implemented.
+
+This is a demo/MVP. It is **not** production healthcare infrastructure, makes no HIPAA claims, and must not be used with real patient data until legal/security review.
+
+## Local development setup
+
+Requirements: Docker + Docker Compose. (Optional: Python 3.12 and Node 20 to run services outside containers.)
+
+```bash
+# 1. Configure environment (defaults run fully offline in mock LLM mode)
+cp .env.example .env
+
+# 2. Start the stack: Postgres/pgvector, Redis, API, and web
+make up            # or: docker compose up
+
+# 3. Verify
+#    API health:    http://localhost:8000/health
+#    API docs:      http://localhost:8000/docs
+#    Web landing:   http://localhost:3000
+
+# 4. Run backend tests (inside the api container)
+make test          # or: docker compose run --rm api pytest
+```
+
+Monorepo layout: `apps/api` (FastAPI backend), `apps/web` (Next.js + TypeScript + Tailwind frontend). No LLM API key is required — `LLM_PROVIDER=mock` produces deterministic outputs; the provider is configurable via env (no provider is hardcoded).
+
+---
+
 Build v1 of an AI relapse-prevention and care-navigation planner.
 
 Product definition:
