@@ -1,6 +1,5 @@
 # AI-Recovery-navigation
 AI relapse prevention and care navigation planner for intake and initial treatment for substance use rehab facilities
-You are Claude Code acting as a senior full-stack engineer, health-tech MVP architect, and safety-conscious AI product builder.
 
 Build v1 of an AI relapse-prevention and care-navigation planner.
 
