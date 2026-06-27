@@ -5,7 +5,13 @@ AI relapse prevention and care navigation planner for intake and initial treatme
 
 ## Project status
 
-Local-first MVP, built in phases (see "Implementation phases" below). **Phase 1 complete:** monorepo scaffold, FastAPI backend with `/health`, Next.js landing page, Docker Compose (Postgres/pgvector + Redis), and mock-mode LLM config. Phases 2–7 (database, consent/intake, journal/documents, safety classifier, mock artifact generation, dashboard/exports) are not yet implemented.
+Local-first MVP, built in phases (see "Implementation phases" below).
+
+- **Phase 1 complete:** monorepo scaffold, FastAPI backend with `/health`, Next.js landing page, Docker Compose (Postgres/pgvector + Redis), and mock-mode LLM config.
+- **Phase 2 complete:** SQLAlchemy models + Alembic migration for the 11 core tables (`users`, `consents`, `intake_sessions`, `intake_answers`, `journal_entries`, `documents`, `document_chunks`, `extracted_entities`, `generated_artifacts`, `safety_events`, `audit_logs`).
+- **Phase 3 complete:** consent + structured intake flow. Backend endpoints `GET /me`, `POST /consent`, `GET /intake/questions`, `POST /intake/start`, `POST /intake/answers`, `GET /intake/latest`, with audit logging. Frontend consent page and a structured-intake form driven by the server-side question catalog. (v1 has no auth — a seeded demo user stands in for the current user.)
+
+Phases 4–7 (journal/documents, safety classifier, mock artifact generation, dashboard/exports) are not yet implemented.
 
 This is a demo/MVP. It is **not** production healthcare infrastructure, makes no HIPAA claims, and must not be used with real patient data until legal/security review.
 
@@ -25,7 +31,10 @@ make up            # or: docker compose up
 #    API docs:      http://localhost:8000/docs
 #    Web landing:   http://localhost:3000
 
-# 4. Run backend tests (inside the api container)
+# 4. Apply database migrations
+make migrate       # or: docker compose run --rm api alembic upgrade head
+
+# 5. Run backend tests (inside the api container)
 make test          # or: docker compose run --rm api pytest
 ```
 

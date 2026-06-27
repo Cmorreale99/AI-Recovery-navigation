@@ -49,7 +49,15 @@ Routes are grouped: system (`/health`), user/intake (`/me`, `/consent`, `/intake
 
 ## Commands
 
-No build/test commands exist yet — the toolchain is not scaffolded. When establishing it, target this developer workflow (per the README's "Definition of done"): `docker compose up` brings up Postgres/pgvector, Redis, and the API; run Alembic migrations; seed a demo user and curated resources. Tests (pytest) must at minimum cover the safety classifier, intake/journal creation, document chunking, the extraction service, mock artifact generation, and the health endpoint. Record the exact commands here once they exist.
+Run from the repo root (all dev work happens in containers). `cp .env.example .env` first.
+
+- `make up` — build + start db (pgvector), redis, api, web
+- `make migrate` — `alembic upgrade head` in the api container
+- `make makemigration msg="..."` — autogenerate a migration
+- `make test` — pytest in the api container
+- `make down` / `make logs` — stop / tail
+
+Migrations live in `apps/api/migrations`; `env.py` reads `DATABASE_URL` from `app.core.config.settings` and targets `app.db.base.Base.metadata` (which imports every model). Add a new model → import it in `app/models/__init__.py` (re-exported by `app/db/base.py`) → `make makemigration`. Tests (pytest) should ultimately cover the safety classifier, intake/journal creation, document chunking, extraction, mock artifact generation, and `/health` (per the README "Definition of done").
 
 ## Required docs
 
